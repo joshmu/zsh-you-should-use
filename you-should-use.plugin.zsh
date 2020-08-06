@@ -124,6 +124,7 @@ function _check_ysu_hardcore() {
 function _check_git_aliases() {
     local typed="$1"
     local expanded="$2"
+    local found=false
 
     # sudo will use another user's profile and so aliases would not apply
     if [[ "$typed" = "sudo "* ]]; then
@@ -131,7 +132,6 @@ function _check_git_aliases() {
     fi
 
     if [[ "$typed" = "git "* ]]; then
-        local found=false
         git config --get-regexp "^alias\..+$" | sort | while read key value; do
             key="${key#alias.}"
 
