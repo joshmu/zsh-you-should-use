@@ -124,7 +124,6 @@ function _check_ysu_hardcore() {
 function _check_git_aliases() {
     local typed="$1"
     local expanded="$2"
-    local found=false
 
     # sudo will use another user's profile and so aliases would not apply
     if [[ "$typed" = "sudo "* ]]; then
@@ -132,9 +131,10 @@ function _check_git_aliases() {
     fi
 
     if [[ "$typed" = "git "* ]]; then
+        local found=false
         git config --get-regexp "^alias\..+$" | sort | while read key value; do
             key="${key#alias.}"
-
+            
             if [[ "$expanded" = "git $value" || "$expanded" = "git $value "* ]]; then
                 ysu_message "git alias" "$value" "git $key"
                 found=true
@@ -271,7 +271,7 @@ function enable_you_should_use() {
     disable_you_should_use   # Delete any possible pre-existing hooks
     add-zsh-hook preexec _check_aliases
     add-zsh-hook preexec _check_global_aliases
-    add-zsh-hook preexec _check_git_aliases
+    # add-zsh-hook preexec _check_git_aliases
     add-zsh-hook precmd _flush_ysu_buffer
 }
 
